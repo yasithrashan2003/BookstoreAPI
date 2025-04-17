@@ -2,25 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.csacoursework;
+package com.mycompany.csacoursework.model;
 
 /**
  *
  * @author Yasith
  */
-public class Author {
+public class Customer {
     private Long id;
     private String name;
-    private String biography;
+    private String email;
+    private String password;
     
     // Constructors
-    public Author() {
+    public Customer() {
     }
     
-    public Author(Long id, String name, String biography) {
+    public Customer(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
-        this.biography = biography;
+        this.email = email;
+        this.password = password;
     }
     
     // Getters and Setters
@@ -40,13 +42,19 @@ public class Author {
         this.name = name;
     }
     
-    public String getBiography() {
-        return biography;
+    public String getEmail() {
+        return email;
     }
     
-    public void setBiography(String biography) {
-        this.biography = biography;
+    public void setEmail(String email) {
+        this.email = email;
     }
     
+    public String getPassword() {
+        return password;
+    }
     
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
