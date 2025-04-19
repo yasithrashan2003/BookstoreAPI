@@ -10,16 +10,19 @@ package com.mycompany.csacoursework.model;
  */
 public class Author {
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String biography;
     
-    // Constructors
+    // Default constructor
     public Author() {
     }
     
-    public Author(Long id, String name, String biography) {
+    // Parameterized constructor
+    public Author(Long id, String firstName, String lastName, String biography) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.biography = biography;
     }
     
@@ -32,12 +35,20 @@ public class Author {
         this.id = id;
     }
     
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return lastName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
     
     public String getBiography() {
@@ -48,5 +59,8 @@ public class Author {
         this.biography = biography;
     }
     
-    
+    // Helper method to get full name
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }
