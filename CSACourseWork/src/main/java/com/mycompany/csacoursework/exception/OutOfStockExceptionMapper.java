@@ -12,17 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Exception mapper for converts OutOfStockExcetion into HTTP response
  *
  * @author Yasith
  */
 @Provider
 public class OutOfStockExceptionMapper implements ExceptionMapper<OutOfStockException> {
+
     @Override
     public Response toResponse(OutOfStockException exception) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Out of Stock");
         errorResponse.put("message", exception.getMessage());
-        
+
         return Response
                 .status(Response.Status.BAD_REQUEST)
                 .entity(errorResponse)

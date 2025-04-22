@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.csacoursework.resource;
+
+// Import Libraries
 import com.mycompany.csacoursework.model.Author;
 import com.mycompany.csacoursework.model.Book;
 import com.mycompany.csacoursework.service.AuthorService;
@@ -14,8 +16,11 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
+ * public class for AuthorResource
  *
  * @author Yasith
  */
@@ -23,61 +28,99 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthorResource {
-     private static final Logger LOGGER = Logger.getLogger(AuthorResource.class.getName());
+
+    private static final Logger LOGGER = Logger.getLogger(AuthorResource.class.getName());
     // Use singleton instance
     private AuthorService authorService = AuthorService.getInstance();
-    private BookService bookService = BookService.getInstance(); // Assuming BookService also has a getInstance method
-    
+    private BookService bookService = BookService.getInstance(); 
+
+    /**
+     * POST method
+     *
+     * @param author
+     * @param uriInfo
+     * @return
+     */
     @POST
     public Response createAuthor(Author author, @Context UriInfo uriInfo) {
-        LOGGER.info("Received request to create a new author: " + author.getFirstName() + " " + author.getLastName());
-        
+        LOGGER.log(Level.INFO, "Received request to create a new author: {0} {1}", new Object[]{author.getFirstName(), author.getLastName()});
+
         Author createdAuthor = authorService.createAuthor(author);
         URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(createdAuthor.getId())).build();
-        LOGGER.info("Author created successfully with ID: " + createdAuthor.getId());
+        LOGGER.log(Level.INFO, "Author created successfully with ID: {0}", createdAuthor.getId());
         return Response.created(uri).entity(createdAuthor).build();
     }
-    
+
+    /**
+     * Get all the authors
+     *
+     * @return
+     */
     @GET
     public List<Author> getAllAuthors() {
         LOGGER.info("Received request to get all authors");
         return authorService.getAllAuthors();
     }
-    
+
+    /**
+     * Get specific author
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/{id}")
     public Author getAuthor(@PathParam("id") Long id) {
-        LOGGER.info("Received request to get author with ID: " + id);
+        LOGGER.log(Level.INFO, "Received request to get author with ID: {0}", id);
         return authorService.getAuthorById(id);
     }
-    
+
+    /**
+     * Update Author
+     *
+     * @param id
+     * @param author
+     * @return
+     */
     @PUT
     @Path("/{id}")
     public Author updateAuthor(@PathParam("id") Long id, Author author) {
-        LOGGER.info("Received request to update author with ID: " + id);
-        
+        LOGGER.log(Level.INFO, "Received request to update author with ID: {0}", id);
+
         Author updatedAuthor = authorService.updateAuthor(id, author);
-        LOGGER.info("Author updated successfully with ID: " + id);
+        LOGGER.log(Level.INFO, "Author updated successfully with ID: {0}", id);
         return updatedAuthor;
     }
-    
+
+    /**
+     * Delete Author
+     *
+     * @param id
+     * @return
+     */
     @DELETE
     @Path("/{id}")
     public Response deleteAuthor(@PathParam("id") Long id) {
-        LOGGER.info("Received request to delete author with ID: " + id);
+        LOGGER.log(Level.INFO, "Received request to delete author with ID: {0}", id);
         authorService.deleteAuthor(id);
-        LOGGER.info("Author deleted successfully with ID: " + id);
+        LOGGER.log(Level.INFO, "Author deleted successfully with ID: {0}", id);
         return Response.noContent().build();
     }
-    
+
+    /**
+     * Get authors by book
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/{id}/books")
     public List<Book> getAuthorBooks(@PathParam("id") Long id) {
-        LOGGER.info("Received request to get books for author with ID: " + id);
+        LOGGER.log(Level.INFO, "Received request to get books for author with ID: {0}", id);
         // Verify author exists first
         authorService.getAuthorById(id);
         List<Book> books = bookService.getBooksByAuthor(id);
-        LOGGER.info("Found " + books.size() + " books for author with ID: " + id);
+        LOGGER.log(Level.INFO, "Found {0} books for author with ID: {1}", new Object[]{books.size(), id});
         return books;
     }
 }

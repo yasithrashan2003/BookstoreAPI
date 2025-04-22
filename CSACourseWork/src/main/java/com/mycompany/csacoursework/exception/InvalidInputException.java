@@ -5,12 +5,18 @@
 package com.mycompany.csacoursework.exception;
 
 /**
+ * Custom Exception for Invalid inputs
  *
  * @author Yasith
  */
-public class InvalidInputException extends RuntimeException{
+public class InvalidInputException extends RuntimeException {
+
+    /**
+     *
+     * @param message
+     */
     public InvalidInputException(String message) {
         super(message);
     }
-    
+
 }

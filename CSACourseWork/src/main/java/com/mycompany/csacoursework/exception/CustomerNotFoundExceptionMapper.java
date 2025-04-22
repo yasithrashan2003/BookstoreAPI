@@ -12,17 +12,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Exception mapper for convert CustomerNotFound to HTTP response
  *
  * @author Yasith
  */
 @Provider
 public class CustomerNotFoundExceptionMapper implements ExceptionMapper<CustomerNotFoundException> {
+
+    /**
+     * Convert exception in to HTTP response
+     *
+     * @param exception
+     * @return
+     */
     @Override
     public Response toResponse(CustomerNotFoundException exception) {
+
+        // create map for hold error details
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Customer Not Found");
         errorResponse.put("message", exception.getMessage());
-        
+
         return Response
                 .status(Response.Status.NOT_FOUND)
                 .entity(errorResponse)

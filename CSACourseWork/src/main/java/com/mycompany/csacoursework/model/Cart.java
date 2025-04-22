@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Public class for Cart Class
  * @author Yasith
  */
 public class Cart {

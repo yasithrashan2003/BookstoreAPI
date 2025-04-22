@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,14 +20,16 @@ import java.util.logging.Logger;
  * @author Yasith
  */
 public class BookService {
+
     private static final Logger LOGGER = Logger.getLogger(BookService.class.getName());
     private static BookService instance;
     private Map<Long, Book> books = new HashMap<>();
     private AtomicLong idCounter = new AtomicLong(1);
-    
+
     // Private constructor for singleton pattern
-    private BookService() {}
-    
+    private BookService() {
+    }
+
     // Get singleton instance
     public static synchronized BookService getInstance() {
         if (instance == null) {
@@ -34,97 +37,127 @@ public class BookService {
         }
         return instance;
     }
-    
-    // Create a book
+
+    /**
+     * Create a book
+     *
+     * @param book
+     * @return
+     */
     public Book createBook(Book book) {
-        LOGGER.info("Creating a new book: " + book.getTitle());
-        
+        LOGGER.log(Level.INFO, "Creating a new book: {0}", book.getTitle());
+
         // Validate book data
         if (book.getTitle() == null || book.getTitle().trim().isEmpty()) {
             LOGGER.warning("Attempt to create book with empty title");
             throw new InvalidInputException("Book title cannot be empty");
         }
-        
+
         if (book.getPublicationYear() > java.time.Year.now().getValue()) {
-            LOGGER.warning("Attempt to create book with future publication year: " + book.getPublicationYear());
+            LOGGER.log(Level.WARNING, "Attempt to create book with future publication year: {0}", book.getPublicationYear());
             throw new InvalidInputException("Publication year cannot be in the future");
         }
-        
+
         // Set a new ID and save the book
         book.setId(idCounter.getAndIncrement());
         books.put(book.getId(), book);
-        LOGGER.info("Book created successfully with ID: " + book.getId());
+        LOGGER.log(Level.INFO, "Book created successfully with ID: {0}", book.getId());
         return book;
     }
-    
-    // Get all books
+
+    /**
+     * Get all the Books
+     *
+     * @return
+     */
     public List<Book> getAllBooks() {
-        LOGGER.info("Retrieving all books. Total count: " + books.size());
+        LOGGER.log(Level.INFO, "Retrieving all books. Total count: {0}", books.size());
         return new ArrayList<>(books.values());
     }
-    
-    // Get book by ID
+
+    /**
+     * get book by id
+     *
+     * @param id
+     * @return
+     */
     public Book getBookById(Long id) {
-        LOGGER.info("Retrieving book with ID: " + id);
+        LOGGER.log(Level.INFO, "Retrieving book with ID: {0}", id);
         Book book = books.get(id);
         if (book == null) {
-            LOGGER.warning("Book not found with ID: " + id);
+            LOGGER.log(Level.WARNING, "Book not found with ID: {0}", id);
             throw new BookNotFoundException(id);
         }
         return book;
     }
-    
-    // Update book
+
+    /**
+     * update book by id
+     *
+     * @param id
+     * @param updatedBook
+     * @return
+     */
     public Book updateBook(Long id, Book updatedBook) {
-        LOGGER.info("Updating book with ID: " + id);
-        
+        LOGGER.log(Level.INFO, "Updating book with ID: {0}", id);
+
+        // validations
         if (!books.containsKey(id)) {
-            LOGGER.warning("Attempt to update non-existent book with ID: " + id);
+            LOGGER.log(Level.WARNING, "Attempt to update non-existent book with ID: {0}", id);
             throw new BookNotFoundException(id);
         }
-        
+
         // Validate updated data
         if (updatedBook.getTitle() == null || updatedBook.getTitle().trim().isEmpty()) {
             LOGGER.warning("Attempt to update book with empty title");
             throw new InvalidInputException("Book title cannot be empty");
         }
-        
+
         if (updatedBook.getPublicationYear() > java.time.Year.now().getValue()) {
-            LOGGER.warning("Attempt to update book with future publication year: " + updatedBook.getPublicationYear());
+            LOGGER.log(Level.WARNING, "Attempt to update book with future publication year: {0}", updatedBook.getPublicationYear());
             throw new InvalidInputException("Publication year cannot be in the future");
         }
-        
+
         updatedBook.setId(id);
         books.put(id, updatedBook);
-        LOGGER.info("Book updated successfully with ID: " + id);
+        LOGGER.log(Level.INFO, "Book updated successfully with ID: {0}", id);
         return updatedBook;
     }
-    
-    // Delete book
+
+    /**
+     * delete book
+     *
+     * @param id
+     */
     public void deleteBook(Long id) {
-        LOGGER.info("Deleting book with ID: " + id);
-        
+        LOGGER.log(Level.INFO, "Deleting book with ID: {0}", id);
+
         if (!books.containsKey(id)) {
-            LOGGER.warning("Attempt to delete non-existent book with ID: " + id);
+            LOGGER.log(Level.WARNING, "Attempt to delete non-existent book with ID: {0}", id);
             throw new BookNotFoundException(id);
         }
-        
+
         books.remove(id);
-        LOGGER.info("Book deleted successfully with ID: " + id);
+        LOGGER.log(Level.INFO, "Book deleted successfully with ID: {0}", id);
     }
-    
-    // Get books by author ID
+
+    /**
+     * get book by author
+     *
+     * @param authorId
+     * @return
+     */
     public List<Book> getBooksByAuthor(Long authorId) {
-        LOGGER.info("Retrieving books for author with ID: " + authorId);
-        
+        LOGGER.log(Level.INFO, "Retrieving books for author with ID: {0}", authorId);
+
         List<Book> authorBooks = new ArrayList<>();
         for (Book book : books.values()) {
             if (book.getAuthorId() != null && book.getAuthorId().equals(authorId)) {
                 authorBooks.add(book);
             }
         }
-        
-        LOGGER.info("Found " + authorBooks.size() + " books for author with ID: " + authorId);
+
+        LOGGER.log(Level.INFO, "Found {0} books for author with ID: {1}", new Object[]{authorBooks.size(), authorId});
         return authorBooks;
     }
 }

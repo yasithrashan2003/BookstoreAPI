@@ -5,14 +5,25 @@
 package com.mycompany.csacoursework.exception;
 
 /**
+ * Custom exception for Cart not found
  *
  * @author Yasith
  */
-public class CartNotFoundException extends RuntimeException{
+public class CartNotFoundException extends RuntimeException {
+
+    /**
+     *
+     * @param message
+     */
     public CartNotFoundException(String message) {
         super(message);
     }
-    
+
+    /**
+     * Generate an error message
+     *
+     * @param customerId
+     */
     public CartNotFoundException(Long customerId) {
         super("Cart not found for customer with ID " + customerId);
     }

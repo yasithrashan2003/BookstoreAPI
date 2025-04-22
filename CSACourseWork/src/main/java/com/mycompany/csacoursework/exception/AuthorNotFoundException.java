@@ -5,16 +5,27 @@
 package com.mycompany.csacoursework.exception;
 
 /**
+ * Custom Exception for Author not found Extends RuntimeException
  *
  * @author Yasith
  */
 public class AuthorNotFoundException extends RuntimeException {
-    public AuthorNotFoundException(String message){
+
+    /**
+     *
+     * @param message include with exception
+     */
+    public AuthorNotFoundException(String message) {
         super(message);
     }
-    
-    public AuthorNotFoundException (Long id){
+
+    /**
+     * Generate a error message
+     *
+     * @param id
+     */
+    public AuthorNotFoundException(Long id) {
         super("Author with ID " + id + " does not exist.");
     }
-    
+
 }

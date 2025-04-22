@@ -5,14 +5,27 @@
 package com.mycompany.csacoursework.exception;
 
 /**
+ * Custom Exception for Out of stock
  *
  * @author Yasith
  */
 public class OutOfStockException extends RuntimeException {
+
+    /**
+     *
+     * @param message
+     */
     public OutOfStockException(String message) {
         super(message);
     }
-    
+
+    /**
+     * Generate an error message
+     *
+     * @param bookId
+     * @param requested
+     * @param available
+     */
     public OutOfStockException(Long bookId, int requested, int available) {
         super("Book with ID " + bookId + " has insufficient stock. Requested: " + requested + ", Available: " + available);
     }

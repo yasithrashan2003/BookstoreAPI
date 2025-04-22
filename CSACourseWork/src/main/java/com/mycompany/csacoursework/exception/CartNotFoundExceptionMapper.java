@@ -12,17 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Exception mapper for converts CartNotFoundExceptionMapper into HTTP response
  *
  * @author Yasith
  */
 @Provider
 public class CartNotFoundExceptionMapper implements ExceptionMapper<CartNotFoundException> {
+
     @Override
     public Response toResponse(CartNotFoundException exception) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Cart Not Found");
         errorResponse.put("message", exception.getMessage());
-        
+
         return Response
                 .status(Response.Status.NOT_FOUND)
                 .entity(errorResponse)
