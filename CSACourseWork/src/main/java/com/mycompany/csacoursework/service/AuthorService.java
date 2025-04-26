@@ -28,6 +28,7 @@ public class AuthorService {
 
     // Private constructor for singleton design pattern
     private AuthorService() {
+        initializeDefaultAuthors();
     }
 
     // Get singleton instance
@@ -36,6 +37,35 @@ public class AuthorService {
             instance = new AuthorService();
         }
         return instance;
+    }
+
+    /**
+     * Default Authors
+     */
+    private void initializeDefaultAuthors() {
+
+        Author author1 = new Author();
+        author1.setFirstName("Frank");
+        author1.setLastName("Herbert");
+        author1.setBiography("American science fiction author best known for the novel Dune.");
+        author1.setId(idCounter.getAndIncrement());
+        authors.put(author1.getId(), author1);
+
+        Author author2 = new Author();
+        author2.setFirstName("J.K.");
+        author2.setLastName("Rowling");
+        author2.setBiography("British author best known for writing the Harry Potter fantasy series.");
+        author2.setId(idCounter.getAndIncrement());
+        authors.put(author2.getId(), author2);
+
+        Author author3 = new Author();
+        author3.setFirstName("George");
+        author3.setLastName("Orwell");
+        author3.setBiography("English novelist, essayist, journalist, and critic known for works like 1984 and Animal Farm.");
+        author3.setId(idCounter.getAndIncrement());
+        authors.put(author3.getId(), author3);
+
+        LOGGER.info("Default authors initialized");
     }
 
     /**

@@ -28,6 +28,7 @@ public class CustomerService {
 
     // Private constructor for singleton pattern
     private CustomerService() {
+        initializeDefaultCustomers();
     }
 
     // Get singleton instance
@@ -36,6 +37,30 @@ public class CustomerService {
             instance = new CustomerService();
         }
         return instance;
+    }
+
+    /**
+     * Add default Customers
+     */
+    private void initializeDefaultCustomers() {
+        // Create and add default customers
+        Customer customer1 = new Customer();
+        customer1.setFirstName("Jane");
+        customer1.setLastName("Smith");
+        customer1.setEmail("jane.smith@example.com");
+        customer1.setPassword("securePassword123");
+        customer1.setId(idCounter.getAndIncrement());
+        customers.put(customer1.getId(), customer1);
+
+        Customer customer2 = new Customer();
+        customer2.setFirstName("John");
+        customer2.setLastName("Doe");
+        customer2.setEmail("john.doe@example.com");
+        customer2.setPassword("password456");
+        customer2.setId(idCounter.getAndIncrement());
+        customers.put(customer2.getId(), customer2);
+
+        LOGGER.info("Default customers initialized");
     }
 
     /**

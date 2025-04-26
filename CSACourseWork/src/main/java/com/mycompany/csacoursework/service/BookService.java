@@ -28,6 +28,7 @@ public class BookService {
 
     // Private constructor for singleton pattern
     private BookService() {
+        initializeDefaultBooks();
     }
 
     // Get singleton instance
@@ -36,6 +37,51 @@ public class BookService {
             instance = new BookService();
         }
         return instance;
+    }
+
+    /**
+     * Add default Books
+     */
+    private void initializeDefaultBooks() {
+        // First, make sure authors exist
+        if (AuthorService.getInstance().authorExists(1L)
+                && AuthorService.getInstance().authorExists(2L)
+                && AuthorService.getInstance().authorExists(3L)) {
+
+            Book book1 = new Book();
+            book1.setTitle("Dune");
+            book1.setAuthorId(1L);
+            book1.setIsbn("978-0441172719");
+            book1.setPublicationYear(1965);
+            book1.setPrice(14.99);
+            book1.setStock(75);
+            book1.setId(idCounter.getAndIncrement());
+            books.put(book1.getId(), book1);
+
+            Book book2 = new Book();
+            book2.setTitle("Harry Potter and the Philosopher's Stone");
+            book2.setAuthorId(2L);
+            book2.setIsbn("978-0747532743");
+            book2.setPublicationYear(1997);
+            book2.setPrice(12.99);
+            book2.setStock(100);
+            book2.setId(idCounter.getAndIncrement());
+            books.put(book2.getId(), book2);
+
+            Book book3 = new Book();
+            book3.setTitle("1984");
+            book3.setAuthorId(3L);
+            book3.setIsbn("978-0451524935");
+            book3.setPublicationYear(1949);
+            book3.setPrice(9.99);
+            book3.setStock(50);
+            book3.setId(idCounter.getAndIncrement());
+            books.put(book3.getId(), book3);
+
+            LOGGER.info("Default books initialized");
+        } else {
+            LOGGER.warning("Could not initialize default books - authors not found");
+        }
     }
 
     /**
@@ -56,6 +102,18 @@ public class BookService {
         if (book.getPublicationYear() > java.time.Year.now().getValue()) {
             LOGGER.log(Level.WARNING, "Attempt to create book with future publication year: {0}", book.getPublicationYear());
             throw new InvalidInputException("Publication year cannot be in the future");
+        }
+
+        // Validation for book price
+        if (book.getPrice() <= 0) {
+            LOGGER.log(Level.WARNING, "Attempt to create book with non-positive price: {0}", book.getPrice());
+            throw new InvalidInputException("Book price must be greater than zero");
+        }
+
+        // Validation for book stock
+        if (book.getStock() < 0) {
+            LOGGER.log(Level.WARNING, "Attempt to create book with negative stock: {0}", book.getStock());
+            throw new InvalidInputException("Book stock cannot be negative");
         }
 
         // Set a new ID and save the book
@@ -116,6 +174,18 @@ public class BookService {
         if (updatedBook.getPublicationYear() > java.time.Year.now().getValue()) {
             LOGGER.log(Level.WARNING, "Attempt to update book with future publication year: {0}", updatedBook.getPublicationYear());
             throw new InvalidInputException("Publication year cannot be in the future");
+        }
+
+        // Validation for Book price
+        if (updatedBook.getPrice() <= 0) {
+            LOGGER.log(Level.WARNING, "Attempt to update book with non-positive price: {0}", updatedBook.getPrice());
+            throw new InvalidInputException("Book price must be greater than zero");
+        }
+
+        // Validation for Book Stock
+        if (updatedBook.getStock() < 0) {
+            LOGGER.log(Level.WARNING, "Attempt to update book with negative stock: {0}", updatedBook.getStock());
+            throw new InvalidInputException("Book stock cannot be negative");
         }
 
         updatedBook.setId(id);
